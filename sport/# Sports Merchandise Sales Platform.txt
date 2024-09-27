@@ -1,0 +1,92 @@
+# Sports Merchandise Sales Platform
+
+class Merchandise:
+    def _init_(self, name, price, quantity):
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+
+    def update_quantity(self, amount):
+        if amount > self.quantity:
+            print(f"Sorry, only {self.quantity} items available.")
+            return False
+        self.quantity -= amount
+        return True
+
+    def get_info(self):
+        return f"{self.name} - Price: ${self.price} - Available: {self.quantity}"
+
+class SalesPlatform:
+    def _init_(self):
+        self.inventory = []
+        self.sales = []
+
+    def add_merchandise(self, name, price, quantity):
+        item = Merchandise(name, price, quantity)
+        self.inventory.append(item)
+        print(f"Added {name} to the inventory.")
+
+    def view_inventory(self):
+        print("\nAvailable Merchandise:")
+        for item in self.inventory:
+            print(item.get_info())
+
+    def purchase_item(self, name, quantity):
+        for item in self.inventory:
+            if item.name.lower() == name.lower():
+                if item.update_quantity(quantity):
+                    total_price = item.price * quantity
+                    self.sales.append({"item": item.name, "quantity": quantity, "total": total_price})
+                    print(f"Purchased {quantity} x {item.name} for ${total_price}.")
+                return
+        print(f"{name} not found in inventory.")
+
+    def view_sales(self):
+        if not self.sales:
+            print("No sales yet.")
+            return
+        print("\nSales Record:")
+        for sale in self.sales:
+            print(f"{sale['quantity']} x {sale['item']} - Total: ${sale['total']}")
+
+# User interface for the Sports Merchandise Sales Platform
+def main():
+    platform = SalesPlatform()
+
+    while True:
+        print("\n--- Sports Merchandise Sales Platform ---")
+        print("1. Add Merchandise")
+        print("2. View Inventory")
+        print("3. Purchase Item")
+        print("4. View Sales")
+        print("5. Exit")
+        
+        choice = input("Select an option (1-5): ")
+
+        if choice == '1':
+            name = input("Enter merchandise name: ")
+            price = float(input("Enter merchandise price: "))
+            quantity = int(input("Enter merchandise quantity: "))
+            platform.add_merchandise(name, price, quantity)
+
+        elif choice == '2':
+            platform.view_inventory()
+
+        elif choice == '3':
+            name = input("Enter the name of the merchandise to purchase: ")
+            quantity = int(input("Enter quantity to purchase: "))
+            platform.purchase_item(name, quantity)
+
+        elif choice == '4':
+            platform.view_sales()
+
+        elif choice == '5':
+            print("Exiting the Sports Merchandise Sales Platform. Goodbye!")
+            break
+
+        else:
+            print("Invalid option. Please try again.")
+
+# Run the platform
+if _name_ == "_main_":
+    main()
